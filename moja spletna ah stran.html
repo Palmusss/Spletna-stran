@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luka Stepišnik | Moja spletna stran</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f4f0ff;
+    color: #292345;
+}
+
+/* NAVIGACIJA */
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background: white;
+    box-shadow: 0 3px 20px #6650a51a;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    color: #7954d9;
+}
+
+nav a {
+    text-decoration: none;
+    color: #51466f;
+    margin-left: 22px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #a477f5;
+}
+
+/* UVOD */
+
+.hero {
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px 20px;
+    background:
+        radial-gradient(circle at 15% 20%, #d8caff 0, transparent 30%),
+        radial-gradient(circle at 85% 80%, #c4e9ff 0, transparent 30%),
+        linear-gradient(135deg, #f7f2ff, #e9f5ff);
+}
+
+.hero-label {
+    background: white;
+    padding: 10px 22px;
+    border-radius: 30px;
+    color: #8158dc;
+    font-weight: bold;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px #8c75b51c;
+}
+
+.hero h1 {
+    font-size: clamp(45px, 9vw, 90px);
+    color: #34275a;
+    line-height: 1.1;
+}
+
+.hero h1 span {
+    color: #9164e8;
+}
+
+.hero p {
+    font-size: 19px;
+    color: #756b8e;
+    margin-top: 25px;
+}
+
+.hero-button {
+    display: inline-block;
+    margin-top: 30px;
+    background: linear-gradient(135deg, #9164e8, #6b9df4);
+    padding: 15px 30px;
+    border-radius: 30px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 8px 20px #9164e855;
+    transition: 0.3s;
+}
+
+.hero-button:hover {
+    transform: translateY(-5px);
+}
+
+/* SKUPNE SEKCIJE */
+
+section {
+    padding: 85px 8%;
+}
+
+.section-title {
+    font-size: 38px;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #382b60;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: #8b80a5;
+    margin-bottom: 45px;
+}
+
+/* HOBIJI */
+
+.hobbies {
+    background: white;
+}
+
+.hobby-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.hobby-card {
+    background: #f7f3ff;
+    border-radius: 22px;
+    padding: 35px 25px;
+    text-align: center;
+    transition: 0.3s;
+    border: 1px solid #eee5ff;
+}
+
+.hobby-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px #8463ba20;
+}
+
+.hobby-icon {
+    font-size: 55px;
+    margin-bottom: 20px;
+}
+
+.hobby-card h3 {
+    font-size: 22px;
+    color: #6847b5;
+    margin-bottom: 12px;
+}
+
+.hobby-card p {
+    color: #817791;
+    line-height: 1.6;
+}
+
+/* ŠOLA */
+
+.school {
+    background: linear-gradient(135deg, #e9e1ff, #e4f4ff);
+    text-align: center;
+}
+
+.school-box {
+    max-width: 750px;
+    margin: auto;
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 10px 35px #7562a51b;
+}
+
+.school-box h3 {
+    color: #7954d9;
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+.school-box p {
+    color: #776d89;
+    line-height: 1.8;
+}
+
+/* ŠOLSKI TEDEN */
+
+.week {
+    background: white;
+}
+
+.week-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+}
+
+.day-card {
+    padding: 30px;
+    border-radius: 20px;
+    background: #f7f3ff;
+    border-left: 5px solid #9c78ed;
+    transition: 0.3s;
+}
+
+.day-card:hover {
+    transform: scale(1.03);
+}
+
+.day-card span {
+    color: #9069dd;
+    font-weight: bold;
+}
+
+.day-card h3 {
+    margin: 15px 0;
+    color: #403264;
+}
+
+.day-card p {
+    color: #817791;
+}
+
+/* LEBRON */
+
+.lebron {
+    text-align: center;
+    background: linear-gradient(135deg, #eee6ff, #e4f5ff);
+}
+
+.lebron h2 {
+    font-size: 32px;
+    margin-bottom: 25px;
+    color: #44316f;
+}
+
+.lebron img {
+    width: min(400px, 90%);
+    border-radius: 20px;
+    box-shadow: 0 12px 30px #62518b35;
+    transition: 0.3s;
+}
+
+.lebron img:hover {
+    transform: scale(1.04);
+}
+
+.lebron-button {
+    display: block;
+    width: fit-content;
+    margin: 30px auto 0;
+    padding: 16px 30px;
+    background: #865fe0;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.lebron-button:hover {
+    background: #6241b5;
+    transform: translateY(-4px);
+}
+
+/* NOGA */
+
+footer {
+    background: #352951;
+    color: #e8dfff;
+    padding: 35px;
+    text-align: center;
+}
+
+footer p {
+    margin: 5px;
+}
+
+/* ANIMACIJA */
+
+@keyframes prihod {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero h1, .hero p, .hero-label {
+    animation: prihod 1s ease;
+}
+
+/* TELEFONI */
+
+@media(max-width: 650px) {
+    nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav a {
+        margin: 0 7px;
+        font-size: 14px;
+    }
+
+    section {
+        padding: 60px 6%;
+    }
+
+    .section-title {
+        font-size: 30px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">✨ Luka Stepišnik</div>
+    <div>
+        <a href="#domov">Domov</a>
+        <a href="#hobiji">Hobiji</a>
+        <a href="#sola">Šola</a>
+        <a href="#teden">Teden</a>
+    </div>
+</nav>
+
+<!-- UVOD -->
+
+<header class="hero" id="domov">
+    <div class="hero-label">👋 Dobrodošli na moji spletni strani!</div>
+
+    <h1>Živjo, jaz sem<br><span>Luka Stepišnik</span></h1>
+
+    <p>Sem učenec Osnovne šole Radlje ob Dravi.</p>
+
+    <a href="#hobiji" class="hero-button">
+        Spoznaj me! ↓
+    </a>
+</header>
+
+<!-- HOBIJI -->
+
+<section class="hobbies" id="hobiji">
+
+    <h2 class="section-title">Moji hobiji 💜</h2>
+    <p class="section-subtitle">To so stvari, ki jih najraje počnem!</p>
+
+    <div class="hobby-grid">
+
+        <div class="hobby-card">
+            <div class="hobby-icon">🚵</div>
+            <h3>Downhill</h3>
+            <p>Rad se vozim s kolesom in uživam v adrenalinu.</p>
+        </div>
+
+        <div class="hobby-card">
+            <div class="hobby-icon">🎮</div>
+            <h3>Videoigrice</h3>
+            <p>Rad igram videoigrice in se zabavam.</p>
+        </div>
+
+        <div class="hobby-card">
+            <div class="hobby-icon">🏀</div>
+            <h3>Košarka</h3>
+            <p>Košarka je eden izmed mojih najljubših hobijev.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- ŠOLA -->
+
+<section class="school" id="sola">
+
+    <h2 class="section-title">Moja šola 🏫</h2>
+    <p class="section-subtitle">Nekaj o mojem šolskem življenju.</p>
+
+    <div class="school-box">
+        <h3>OŠ Radlje ob Dravi</h3>
+
+        <p>
+            Hodim v Osnovno šolo Radlje ob Dravi
+            in nimam veliko pripomb!
+            V šoli se učim novih stvari,
+            družim s prijatelji in preživljam čas.
+        </p>
+
+        <p style="font-size:35px; margin-top:20px;">
+            📚 ✏️ 🎒
+        </p>
+    </div>
+
+</section>
+
+<!-- ŠOLSKI TEDEN -->
+
+<section class="week" id="teden">
+
+    <h2 class="section-title">Moj šolski teden 📅</h2>
+    <p class="section-subtitle">Moji najljubši in malo manj najljubši dnevi.</p>
+
+    <div class="week-grid">
+
+        <div class="day-card">
+            <span>PONEDELJEK 🌟</span>
+            <h3>Všeč mi je!</h3>
+            <p>Všeč mi je, ker ni matematike. Jep!</p>
+        </div>
+
+        <div class="day-card">
+            <span>SREDA 😭</span>
+            <h3>Ni mi všeč!</h3>
+            <p>Ni mi všeč, ker imamo matematiko. Ne!</p>
+        </div>
+
+        <div class="day-card">
+            <span>NEDELJA 😎</span>
+            <h3>Dan za sprostitev</h3>
+            <p>Čas za počitek, zabavo in pripravo na nov teden.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- LEBRON -->
+
+<section class="lebron">
+
+    <h2>🏀 Še nekaj o Labroju!</h2>
+
+    <p style="color:#766b8c; margin-bottom:25px;">
+        Klikni spodaj za vec slikic labroja broja!
+    </p>
+
+    <img src="lebro.gif" alt="LeBron James">
+
+    <a href="gragur.html" class="lebron-button">
+        Povezava do Labroja 🏀
+    </a>
+
+</section>
+
+<footer>
+    <p>✨ Stran Luke Stepišnika</p>
+    <p>Osnovna šola Radlje ob Dravi</p>
+    <p>© 2026 | Moja osebna spletna stran</p>
+</footer>
+
+</body>
+</html>
+
+<div style="text-align: center; margin-top: 25px;">
+    <a href="petko.html" class="hero-button">
+        🖐️ Obišči Petkona!
+    </a>
+</div>
+
+

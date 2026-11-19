@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SCARY ICE CREAM HOUSE</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    color:#fff;
+    font-family:Arial,sans-serif;
+}
+
+canvas{
+    display:block;
+    width:100%;
+    height:100%;
+    background:#020202;
+    cursor:none;
+}
+
+#ui{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+}
+
+#crosshair{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:5px;
+    height:5px;
+    margin:-2px;
+    border:1px solid rgba(255,255,255,.75);
+    border-radius:50%;
+    box-shadow:0 0 5px white;
+}
+
+#hud{
+    position:absolute;
+    left:22px;
+    top:20px;
+    font-size:15px;
+    text-shadow:0 2px 6px #000;
+    letter-spacing:1px;
+}
+
+#battery{
+    width:170px;
+    height:11px;
+    border:1px solid rgba(255,255,255,.8);
+    margin-top:7px;
+    background:#111;
+}
+
+#batteryFill{
+    width:100%;
+    height:100%;
+    background:#ddd;
+    transition:.15s;
+}
+
+#objective{
+    margin-top:12px;
+    color:#ddd;
+}
+
+#message{
+    position:absolute;
+    bottom:14%;
+    width:100%;
+    text-align:center;
+    font-size:21px;
+    letter-spacing:2px;
+    text-shadow:0 2px 8px #000;
+}
+
+#danger{
+    position:absolute;
+    inset:0;
+    border:0 solid rgba(180,0,0,0);
+}
+
+#start,
+#end{
+    position:fixed;
+    inset:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+}
+
+#start{
+    background:
+        radial-gradient(circle at center,#292929 0,#090909 38%,#000 100%);
+}
+
+#start h1{
+    font-size:54px;
+    margin:0 0 5px;
+    letter-spacing:8px;
+    color:#eee;
+    text-shadow:
+        0 0 10px #fff,
+        0 0 35px #700;
+}
+
+#start .sub{
+    color:#a00;
+    letter-spacing:5px;
+    margin-bottom:20px;
+}
+
+#start p{
+    max-width:700px;
+    color:#aaa;
+    line-height:1.7;
+}
+
+button{
+    padding:16px 42px;
+    border:1px solid #777;
+    background:#ddd;
+    color:#050505;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:15px;
+}
+
+button:hover{
+    background:#fff;
+    box-shadow:0 0 25px #fff;
+}
+
+#end{
+    display:none;
+    background:rgba(0,0,0,.96);
+}
+
+#end h1{
+    font-size:55px;
+    color:#eee;
+    text-shadow:0 0 25px #a00;
+}
+
+#end p{
+    color:#aaa;
+}
+
+#static{
+    position:fixed;
+    inset:0;
+    z-index:15;
+    pointer-events:none;
+    opacity:0;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,.025) 0px,
+            rgba(255,255,255,.025) 1px,
+            transparent 1px,
+            transparent 3px
+        );
+    mix-blend-mode:screen;
+}
+
+#blood{
+    position:fixed;
+    inset:0;
+    z-index:14;
+    pointer-events:none;
+    opacity:0;
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 35%,
+            rgba(80,0,0,.2) 60%,
+            rgba(150,0,0,.6) 100%
+        );
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="game"></canvas>
+
+<div id="ui">
+
+    <div id="hud">
+        🔦 SVETILKA
+        <div id="battery">
+            <div id="batteryFill"></div>
+        </div>
+
+        <div id="objective">
+            Poišči ključ.
+        </div>
+    </div>
+
+    <div id="crosshair"></div>
+
+    <div id="message"></div>
+
+    <div id="danger"></div>
+</div>
+
+<div id="static"></div>
+<div id="blood"></div>
+
+<div id="start">
+    <h1>ICE CREAM HOUSE</h1>
+    <div class="sub">NIGHTMARE EDITION</div>
+
+    <p>
+        Zbudil si se v zapuščeni hiši, kjer so nekoč izdelovali sladoled.
+        <br>
+        Toda nekdo je še vedno tukaj.
+        <br><br>
+
+        <b>W A S D</b> – premikanje<br>
+        <b>SHIFT</b> – tek<br>
+        <b>MIŠKA</b> – pogled<br>
+        <b>F</b> – svetilka<br>
+        <b>E</b> – uporaba
+        <br><br>
+
+        Ne zaupaj zvokom.
+        <br>
+        In če zaslišiš dihanje ...
+        <br>
+        <b>NE OBRNI SE.</b>
+    </p>
+
+    <button id="startBtn">VSTOPI V HIŠO</button>
+</div>
+
+<div id="end">
+    <h1 id="endTitle">...</h1>
+    <p id="endText"></p>
+    <button onclick="location.reload()">IGRAJ ZNOVA</button>
+</div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   SCARY ICE CREAM HOUSE
+   3D horror raycaster
+   brez zunanjih knjižnic
+   ========================================================= */
+
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+
+let W=innerWidth;
+let H=innerHeight;
+
+canvas.width=W;
+canvas.height=H;
+
+addEventListener("resize",()=>{
+    W=innerWidth;
+    H=innerHeight;
+    canvas.width=W;
+    canvas.height=H;
+});
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let started=false;
+let gameOver=false;
+
+const keys={};
+
+let flashlight=true;
+let battery=100;
+
+let mouseLocked=false;
+
+let messageTimer=0;
+let last=performance.now();
+
+let shake=0;
+let staticAmount=0;
+let bloodAmount=0;
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+addEventListener("keydown",e=>{
+
+    keys[e.key.toLowerCase()]=true;
+
+    if(e.key.toLowerCase()==="f" && started && !gameOver){
+        flashlight=!flashlight;
+        sfxClick();
+    }
+
+    if(e.key.toLowerCase()==="e" && started && !gameOver){
+        interact();
+    }
+});
+
+addEventListener("keyup",e=>{
+    keys[e.key.toLowerCase()]=false;
+});
+
+canvas.addEventListener("click",()=>{
+
+    if(started && !gameOver){
+        canvas.requestPointerLock();
+    }
+
+});
+
+document.addEventListener("pointerlockchange",()=>{
+    mouseLocked=document.pointerLockElement===canvas;
+});
+
+document.addEventListener("mousemove",e=>{
+
+    if(!mouseLocked || gameOver)return;
+
+    player.angle+=e.movementX*.0025;
+
+});
+
+/* =========================================================
+   AUDIO
+   ========================================================= */
+
+let audio=null;
+let master=null;
+
+function initAudio(){
+
+    if(audio)return;
+
+    audio=new (window.AudioContext||window.webkitAudioContext)();
+
+    master=audio.createGain();
+    master.gain.value=.22;
+    master.connect(audio.destination);
+
+    ambientDrone();
+}
+
+function oscillator(freq,duration,type="sine",volume=.1){
+
+    if(!audio)return;
+
+    const osc=audio.createOscillator();
+    const gain=audio.createGain();
+
+    osc.type=type;
+    osc.frequency.value=freq;
+
+    gain.gain.value=volume;
+
+    osc.connect(gain);
+    gain.connect(master);
+
+    osc.start();
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        audio.currentTime+duration
+    );
+
+    osc.stop(audio.currentTime+duration);
+}
+
+function noise(duration=.15,volume=.08){
+
+    if(!audio)return;
+
+    const buffer=audio.createBuffer(
+        1,
+        audio.sampleRate*duration,
+        audio.sampleRate
+    );
+
+    const data=buffer.getChannelData(0);
+
+    for(let i=0;i<data.length;i++){
+        data[i]=(Math.random()*2-1);
+    }
+
+    const source=audio.createBufferSource();
+    const gain=audio.createGain();
+
+    source.buffer=buffer;
+    gain.gain.value=volume;
+
+    source.connect(gain);
+    gain.connect(master);
+
+    source.start();
+}
+
+function sfxClick(){
+
+    oscillator(450,.04,"square",.06);
+    oscillator(120,.08,"sine",.04);
+
+}
+
+function sfxDoor(){
+
+    oscillator(80,.4,"sawtooth",.12);
+    noise(.25,.06);
+
+}
+
+function sfxKey(){
+
+    oscillator(700,.08,"sine",.13);
+
+    setTimeout(()=>{
+        oscillator(1050,.18,"sine",.13);
+    },80);
+
+}
+
+function sfxFootstep(){
+
+    noise(.045,.025);
+    oscillator(55,.04,"sine",.025);
+
+}
+
+function sfxScare(){
+
+    oscillator(40,.8,"sawtooth",.3);
+
+    setTimeout(()=>{
+        oscillator(75,.6,"square",.2);
+    },100);
+
+    noise(.5,.18);
+}
+
+function ambientDrone(){
+
+    if(!audio)return;
+
+    const osc=audio.createOscillator();
+    const gain=audio.createGain();
+
+    osc.type="sine";
+    osc.frequency.value=32;
+
+    gain.gain.value=.025;
+
+    osc.connect(gain);
+    gain.connect(master);
+
+    osc.start();
+}
+
+/* =========================================================
+   WORLD
+   ========================================================= */
+
+/*
+    # wall
+    . floor
+    D locked door
+    S secret door
+    K key
+    E exit
+*/
+
+const map=[
+
+"##############################",
+"#............#...............#",
+"#............#...............#",
+"#............#...............#",
+"#....######..#......#####....#",
+"#............#...............#",
+"#............................#",
+"#.....###########............#",
+"#............................#",
+"#..........#.................#",
+"#..........#....######.......#",
+"#..........#.................#",
+"#............................#",
+"#....####....................#",
+"#............................#",
+"#..........##########........#",
+"#............................#",
+"#..............K............#",
+"#............................#",
+"#....######.................#",
+"#............................#",
+"#.............D..............#",
+"#............................#",
+"#...........#####............#",
+"#............................#",
+"##############################"
+
+];
+
+const TILE=1;
+
+const walls=[];
+
+for(let y=0;y<map.length;y++){
+
+    for(let x=0;x<map[y].length;x++){
+
+        if(map[y][x]==="#"){
+            walls.push({
+                x:x+.5,
+                y:y+.5
+            });
+        }
+
+    }
+}
+
+/* =========================================================
+   PLAYER
+   ========================================================= */
+
+const player={
+    x:3.5,
+    y:3.5,
+    angle:0,
+    speed:2.5,
+    sprint:4.2
+};
+
+/* =========================================================
+   KEY / EXIT
+   ========================================================= */
+
+const keyItem={
+    x:15.5,
+    y:17.5,
+    taken:false
+};
+
+const exit={
+    x:14.5,
+    y:21.5,
+    open:false
+};
+
+/* =========================================================
+   MONSTER
+   ========================================================= */
+
+const monster={
+
+    x:24.5,
+    y:23.5,
+
+    angle:Math.PI,
+
+    speed:1.0,
+
+    state:"patrol",
+
+    targetX:24.5,
+    targetY:23.5,
+
+    awareness:0,
+
+    scareCooldown:0
+
+};
+
+const patrolPoints=[
+
+    {x:24.5,y:23.5},
+    {x:27.5,y:23.5},
+    {x:27.5,y:17.5},
+    {x:22.5,y:17.5},
+    {x:22.5,y:12.5},
+    {x:26.5,y:12.5},
+    {x:26.5,y:6.5},
+    {x:17.5,y:6.5},
+    {x:17.5,y:3.5}
+
+];
+
+let patrolIndex=0;
+
+/* =========================================================
+   COLLISION
+   ========================================================= */
+
+function isWall(x,y){
+
+    if(
+        x<0 ||
+        y<0 ||
+        y>=map.length ||
+        x>=map[0].length
+    )return true;
+
+    const c=map[Math.floor(y)][Math.floor(x)];
+
+    if(c==="#")return true;
+
+    if(c==="D" && !exit.open)return true;
+
+    return false;
+}
+
+function canMove(x,y){
+
+    const r=.22;
+
+    return(
+        !isWall(x-r,y-r) &&
+        !isWall(x+r,y-r) &&
+        !isWall(x-r,y+r) &&
+        !isWall(x+r,y+r)
+    );
+
+}
+
+function moveObject(obj,dx,dy){
+
+    if(canMove(obj.x+dx,obj.y))
+        obj.x+=dx;
+
+    if(canMove(obj.x,obj.y+dy))
+        obj.y+=dy;
+
+}
+
+function dist(ax,ay,bx,by){
+
+    return Math.hypot(
+        ax-bx,
+        ay-by
+    );
+
+}
+
+/* =========================================================
+   LOS
+   ========================================================= */
+
+function lineOfSight(ax,ay,bx,by){
+
+    const d=dist(ax,ay,bx,by);
+
+    const steps=Math.ceil(d*15);
+
+    for(let i=1;i<steps;i++){
+
+        const t=i/steps;
+
+        const x=ax+(bx-ax)*t;
+        const y=ay+(by-ay)*t;
+
+        if(isWall(x,y))
+            return false;
+    }
+
+    return true;
+}
+
+/* =========================================================
+   PLAYER
+   ========================================================= */
+
+let footTimer=0;
+
+function updatePlayer(dt){
+
+    let f=0;
+    let s=0;
+
+    if(keys["w"])f++;
+    if(keys["s"])f--;
+
+    if(keys["a"])s--;
+    if(keys["d"])s++;
+
+    const moving=f!==0 || s!==0;
+
+    if(moving){
+
+        const len=Math.hypot(f,s);
+
+        f/=len;
+        s/=len;
+
+        const speed=keys["shift"]
+            ? player.sprint
+            : player.speed;
+
+        const dx=
+            Math.cos(player.angle)*f-
+            Math.sin(player.angle)*s;
+
+        const dy=
+            Math.sin(player.angle)*f+
+            Math.cos(player.angle)*s;
+
+        moveObject(
+            player,
+            dx*speed*dt,
+            dy*speed*dt
+        );
+
+        footTimer-=dt;
+
+        if(footTimer<=0){
+
+            sfxFootstep();
+
+            footTimer=
+                keys["shift"]?.28:.43;
+
+        }
+
+    }
+
+    if(flashlight){
+
+        battery-=dt*1.15;
+
+        if(battery<=0){
+
+            battery=0;
+            flashlight=false;
+
+            message("Svetilka je ugasnila.");
+
+            noise(.2,.08);
+        }
+
+    }
+
+}
+
+/* =========================================================
+   MONSTER AI
+   ========================================================= */
+
+function updateMonster(dt){
+
+    const d=dist(
+        monster.x,
+        monster.y,
+        player.x,
+        player.y
+    );
+
+    const visible=
+        d<12 &&
+        lineOfSight(
+            monster.x,
+            monster.y,
+            player.x,
+            player.y
+        );
+
+    /* flashlight makes monster easier to notice,
+       but also slightly increases awareness */
+
+    if(visible){
+
+        monster.awareness+=dt*
+            (flashlight?1.7:.7);
+
+    }else{
+
+        monster.awareness-=dt*.8;
+
+    }
+
+    monster.awareness=
+        Math.max(
+            0,
+            Math.min(
+                3,
+                monster.awareness
+            )
+        );
+
+    if(monster.awareness>1){
+
+        monster.state="chase";
+
+        monster.targetX=player.x;
+        monster.targetY=player.y;
+
+    }
+
+    if(monster.state==="chase"){
+
+        const dx=
+            player.x-monster.x;
+
+        const dy=
+            player.y-monster.y;
+
+        const len=Math.hypot(dx,dy);
+
+        if(len>0){
+
+            monster.angle=
+                Math.atan2(dy,dx);
+
+            const chaseSpeed=
+                monster.speed+
+                (d<6?0.65:0)+
+                (d<3?0.45:0);
+
+            moveObject(
+                monster,
+                dx/len*chaseSpeed*dt,
+                dy/len*chaseSpeed*dt
+            );
+
+        }
+
+        if(d<.72){
+
+            monsterAttack();
+
+        }
+
+        if(!visible && d>13){
+
+            monster.state="patrol";
+            monster.awareness=0;
+
+        }
+
+    }else{
+
+        const p=patrolPoints[patrolIndex];
+
+        const dx=p.x-monster.x;
+        const dy=p.y-monster.y;
+
+        const len=Math.hypot(dx,dy);
+
+        if(len<.35){
+
+            patrolIndex=
+                (patrolIndex+1)%
+                patrolPoints.length;
+
+        }else{
+
+            monster.angle=
+                Math.atan2(dy,dx);
+
+            moveObject(
+                monster,
+                dx/len*monster.speed*dt,
+                dy/len*monster.speed*dt
+            );
+
+        }
+
+    }
+
+    /* breathing when close */
+
+    if(d<6 && Math.random()<dt*.8){
+
+        oscillator(
+            70,
+            .18,
+            "sine",
+            .04
+        );
+
+    }
+
+}
+
+/* =========================================================
+   RAYCAST
+   ========================================================= */
+
+const FOV=Math.PI/3;
+
+function castRay(angle){
+
+    const sin=Math.sin(angle);
+    const cos=Math.cos(angle);
+
+    let x=player.x;
+    let y=player.y;
+
+    const step=.025;
+
+    for(
+        let depth=0;
+        depth<30;
+        depth+=step
+    ){
+
+        x+=cos*step;
+        y+=sin*step;
+
+        if(isWall(x,y)){
+
+            return{
+                distance:depth,
+                x,
+                y
+            };
+
+        }
+
+    }
+
+    return{
+        distance:30,
+        x,
+        y
+    };
+
+}
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function render(){
+
+    /* CEILING */
+
+    const ceiling=
+        ctx.createLinearGradient(
+            0,0,0,H/2
+        );
+
+    ceiling.addColorStop(
+        0,
+        "#010101"
+    );
+
+    ceiling.addColorStop(
+        1,
+        "#141417"
+    );
+
+    ctx.fillStyle=ceiling;
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H/2
+    );
+
+    /* FLOOR */
+
+    const floor=
+        ctx.createLinearGradient(
+            0,H/2,0,H
+        );
+
+    floor.addColorStop(
+        0,
+        "#191716"
+    );
+
+    floor.addColorStop(
+        1,
+        "#010101"
+    );
+
+    ctx.fillStyle=floor;
+
+    ctx.fillRect(
+        0,
+        H/2,
+        W,
+        H/2
+    );
+
+    const rays=
+        Math.min(
+            Math.floor(W/2),
+            600
+        );
+
+    const columnW=W/rays;
+
+    for(let i=0;i<rays;i++){
+
+        const camera=
+            i/rays-.5;
+
+        const angle=
+            player.angle+
+            camera*FOV;
+
+        const hit=
+            castRay(angle);
+
+        let d=
+            hit.distance*
+            Math.cos(
+                angle-player.angle
+            );
+
+        d=Math.max(d,.01);
+
+        let height=
+            H/(d*.78);
+
+        const wallShade=
+            Math.max(
+                5,
+                190-d*13
+            );
+
+        let light=1;
+
+        if(flashlight){
+
+            const a=Math.abs(
+                normalize(
+                    angle-player.angle
+                )
+            );
+
+            const beam=
+                Math.max(
+                    0,
+                    1-a/(FOV*.55)
+                );
+
+            light=.12+
+                beam*.95;
+
+        }else{
+
+            light=.045;
+
+        }
+
+        const noiseShade=
+            Math.random()*3;
+
+        const r=
+            Math.min(
+                255,
+                wallShade*
+                light+
+                noiseShade
+            );
+
+        const g=
+            Math.min(
+                255,
+                wallShade*
+                .9*
+                light+
+                noiseShade
+            );
+
+        const b=
+            Math.min(
+                255,
+                wallShade*
+                .82*
+                light+
+                noiseShade
+            );
+
+        ctx.fillStyle=
+            `rgb(${r},${g},${b})`;
+
+        ctx.fillRect(
+            i*columnW,
+            H/2-height/2,
+            columnW+1,
+            height
+        );
+
+    }
+
+    renderObjects();
+
+    renderLighting();
+
+    renderWeapon();
+
+    renderVignette();
+
+}
+
+/* =========================================================
+   OBJECTS
+   ========================================================= */
+
+function normalize(a){
+
+    while(a>Math.PI)
+        a-=Math.PI*2;
+
+    while(a<-Math.PI)
+        a+=Math.PI*2;
+
+    return a;
+
+}
+
+function project(obj,size,color){
+
+    const dx=obj.x-player.x;
+    const dy=obj.y-player.y;
+
+    const d=Math.hypot(dx,dy);
+
+    let a=
+        Math.atan2(dy,dx)-
+        player.angle;
+
+    a=normalize(a);
+
+    if(Math.abs(a)>FOV*.72)
+        return;
+
+    const sx=
+        W/2+
+        Math.tan(a)/
+        Math.tan(FOV/2)*
+        W/2;
+
+    const h=
+        H/(d*1.1)*size;
+
+    const wall=
+        castRay(
+            player.angle+a
+        );
+
+    if(d>wall.distance+.1)
+        return;
+
+    ctx.fillStyle=color;
+
+    ctx.fillRect(
+        sx-h/2,
+        H/2-h/2,
+        h,
+        h
+    );
+
+}
+
+/* =========================================================
+   MONSTER RENDER
+   ========================================================= */
+
+function renderMonster(){
+
+    const dx=
+        monster.x-player.x;
+
+    const dy=
+        monster.y-player.y;
+
+    const d=Math.hypot(dx,dy);
+
+    if(d>18)return;
+
+    let a=
+        Math.atan2(dy,dx)-
+        player.angle;
+
+    a=normalize(a);
+
+    if(Math.abs(a)>FOV*.72)
+        return;
+
+    const sx=
+        W/2+
+        Math.tan(a)/
+        Math.tan(FOV/2)*
+        W/2;
+
+    const size=
+        H/(d*.82);
+
+    const wall=
+        castRay(
+            player.angle+a
+        );
+
+    if(d>wall.distance+.1)
+        return;
+
+    const top=
+        H/2-size*.56;
+
+    /* shadow */
+
+    ctx.fillStyle=
+        "rgba(0,0,0,.8)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        sx,
+        H/2+size*.48,
+        size*.55,
+        size*.12,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    /* body */
+
+    ctx.fillStyle="#111";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        sx-size*.30,
+        top+size*.30
+    );
+
+    ctx.lineTo(
+        sx-size*.43,
+        top+size*.96
+    );
+
+    ctx.lineTo(
+        sx+size*.43,
+        top+size*.96
+    );
+
+    ctx.lineTo(
+        sx+size*.30,
+        top+size*.30
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+    /* long arms */
+
+    ctx.strokeStyle="#090909";
+    ctx.lineWidth=Math.max(3,size*.08);
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        sx-size*.24,
+        top+size*.4
+    );
+
+    ctx.lineTo(
+        sx-size*.62,
+        top+size*.88
+    );
+
+    ctx.moveTo(
+        sx+size*.24,
+        top+size*.4
+    );
+
+    ctx.lineTo(
+        sx+size*.62,
+        top+size*.88
+    );
+
+    ctx.stroke();
+
+    /* neck */
+
+    ctx.fillStyle="#1b1b1b";
+
+    ctx.fillRect(
+        sx-size*.12,
+        top+size*.18,
+        size*.24,
+        size*.22
+    );
+
+    /* head */
+
+    ctx.fillStyle="#c1a090";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        sx,
+        top+size*.15,
+        size*.22,
+        size*.25,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    /* dark hair */
+
+    ctx.fillStyle="#090909";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        sx,
+        top+size*.08,
+        size*.24,
+        Math.PI,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    /* eyes */
+
+    ctx.fillStyle="#ff1818";
+
+    ctx.shadowBlur=18;
+    ctx.shadowColor="#f00";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        sx-size*.09,
+        top+size*.14,
+        size*.045,
+        size*.025,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.ellipse(
+        sx+size*.09,
+        top+size*.14,
+        size*.045,
+        size*.025,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.shadowBlur=0;
+
+    /* terrifying mouth */
+
+    ctx.fillStyle="#050505";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        sx,
+        top+size*.28,
+        size*.105,
+        size*.07,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    /* teeth */
+
+    ctx.fillStyle="#eee";
+
+    for(let i=0;i<5;i++){
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            sx-size*.07+i*size*.035,
+            top+size*.25
+        );
+
+        ctx.lineTo(
+            sx-size*.055+i*size*.035,
+            top+size*.32
+        );
+
+        ctx.lineTo(
+            sx-size*.04+i*size*.035,
+            top+size*.25
+        );
+
+        ctx.fill();
+
+    }
+
+    /* ice cream machine */
+
+    ctx.fillStyle="#555";
+
+    ctx.fillRect(
+        sx+size*.18,
+        top+size*.47,
+        size*.38,
+        size*.32
+    );
+
+    ctx.fillStyle="#171717";
+
+    ctx.fillRect(
+        sx+size*.22,
+        top+size*.52,
+        size*.24,
+        size*.18
+    );
+
+}
+
+/* =========================================================
+   KEY
+   ========================================================= */
+
+function renderKey(){
+
+    if(keyItem.taken)return;
+
+    const dx=
+        keyItem.x-player.x;
+
+    const dy=
+        keyItem.y-player.y;
+
+    const d=Math.hypot(dx,dy);
+
+    let a=
+        Math.atan2(dy,dx)-
+        player.angle;
+
+    a=normalize(a);
+
+    if(Math.abs(a)>FOV*.72)
+        return;
+
+    const sx=
+        W/2+
+        Math.tan(a)/
+        Math.tan(FOV/2)*
+        W/2;
+
+    const size=
+        H/(d*1.2)*.15;
+
+    const wall=
+        castRay(
+            player.angle+a
+        );
+
+    if(d>wall.distance)return;
+
+    ctx.strokeStyle="#ffd000";
+    ctx.lineWidth=Math.max(2,size*.12);
+    ctx.shadowColor="#ffd000";
+    ctx.shadowBlur=20;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        sx,
+        H/2-size*.15,
+        size*.23,
+        0,
+        Math.PI*2
+    );
+
+    ctx.moveTo(
+        sx+size*.23,
+        H/2-size*.15
+    );
+
+    ctx.lineTo(
+        sx+size*.8,
+        H/2-size*.15
+    );
+
+    ctx.lineTo(
+        sx+size*.62,
+        H/2+size*.05
+    );
+
+    ctx.stroke();
+
+    ctx.shadowBlur=0;
+
+}
+
+/* =========================================================
+   OBJECT RENDER
+   ========================================================= */
+
+function renderObjects(){
+
+    renderKey();
+
+    renderMonster();
+
+}
+
+/* =========================================================
+   FLASHLIGHT / LIGHT
+   ========================================================= */
+
+function renderLighting(){
+
+    if(!flashlight){
+
+        ctx.fillStyle="rgba(0,0,0,.58)";
+        ctx.fillRect(0,0,W,H);
+
+        return;
+
+    }
+
+    const light=
+        ctx.createRadialGradient(
+            W/2,
+            H/2,
+            20,
+            W/2,
+            H/2,
+            Math.min(W,H)*.65
+        );
+
+    light.addColorStop(
+        0,
+        "rgba(255,255,235,.05)"
+    );
+
+    light.addColorStop(
+        .35,
+        "rgba(255,255,230,.02)"
+    );
+
+    light.addColorStop(
+        1,
+        "rgba(0,0,0,.5)"
+    );
+
+    ctx.fillStyle=light;
+    ctx.fillRect(0,0,W,H);
+
+}
+
+/* =========================================================
+   WEAPON
+   ========================================================= */
+
+function renderWeapon(){
+
+    /* arm */
+
+    ctx.fillStyle="#bd846d";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        W*.82,
+        H*.86,
+        40,
+        75,
+        -.35,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    /* flashlight body */
+
+    ctx.fillStyle="#1a1a1a";
+
+    ctx.save();
+
+    ctx.translate(
+        W*.78,
+        H*.83
+    );
+
+    ctx.rotate(-.12);
+
+    ctx.fillRect(
+        -15,
+        -17,
+        145,
+        34
+    );
+
+    ctx.fillStyle="#555";
+
+    ctx.fillRect(
+        -15,
+        -17,
+        18,
+        34
+    );
+
+    ctx.fillStyle=
+        flashlight
+        ? "#eee"
+        : "#111";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        -17,
+        0,
+        13,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.restore();
+
+}
+
+/* =========================================================
+   VIGNETTE / FEAR
+   ========================================================= */
+
+function renderVignette(){
+
+    const d=
+        dist(
+            player.x,
+            player.y,
+            monster.x,
+            monster.y
+        );
+
+    if(d<7){
+
+        const fear=
+            Math.max(
+                0,
+                (7-d)/7
+            );
+
+        ctx.fillStyle=
+            `rgba(130,0,0,${fear*.18})`;
+
+        ctx.fillRect(
+            0,0,W,H
+        );
+
+        const pulse=
+            Math.sin(
+                performance.now()*.015
+            )*.5+.5;
+
+        document.getElementById(
+            "danger"
+        ).style.border=
+            `${2+fear*15}px solid rgba(180,0,0,${fear*(.2+pulse*.25)})`;
+
+    }else{
+
+        document.getElementById(
+            "danger"
+        ).style.border=
+            "0 solid transparent";
+
+    }
+
+    const g=
+        ctx.createRadialGradient(
+            W/2,
+            H/2,
+            Math.min(W,H)*.18,
+            W/2,
+            H/2,
+            Math.max(W,H)*.72
+        );
+
+    g.addColorStop(
+        0,
+        "rgba(0,0,0,0)"
+    );
+
+    g.addColorStop(
+        .65,
+        "rgba(0,0,0,.12)"
+    );
+
+    g.addColorStop(
+        1,
+        "rgba(0,0,0,.9)"
+    );
+
+    ctx.fillStyle=g;
+
+    ctx.fillRect(
+        0,0,W,H
+    );
+
+    document.getElementById(
+        "static"
+    ).style.opacity=
+        Math.random()*.025;
+
+}
+
+/* =========================================================
+   INTERACTION
+   ========================================================= */
+
+function interact(){
+
+    if(
+        !keyItem.taken &&
+        dist(
+            player.x,
+            player.y,
+            keyItem.x,
+            keyItem.y
+        )<1.4
+    ){
+
+        keyItem.taken=true;
+
+        sfxKey();
+
+        message(
+            "NAŠEL SI STAR KLJUČ..."
+        );
+
+        return;
+
+    }
+
+    const d=
+        dist(
+            player.x,
+            player.y,
+            exit.x,
+            exit.y
+        );
+
+    if(d<1.5){
+
+        if(!keyItem.taken){
+
+            sfxDoor();
+
+            message(
+                "VRATA SO ZAKLENJENA."
+            );
+
+        }else{
+
+            exit.open=true;
+
+            sfxDoor();
+
+            winGame();
+
+        }
+
+    }
+
+}
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+function message(text){
+
+    document.getElementById(
+        "message"
+    ).textContent=text;
+
+    messageTimer=3;
+
+}
+
+/* =========================================================
+   MONSTER ATTACK
+   ========================================================= */
+
+function monsterAttack(){
+
+    if(gameOver)return;
+
+    gameOver=true;
+
+    sfxScare();
+
+    shake=30;
+    bloodAmount=1;
+    staticAmount=1;
+
+    if(document.pointerLockElement)
+        document.exitPointerLock();
+
+    /* aggressive red flash */
+
+    document.getElementById(
+        "blood"
+    ).style.opacity="1";
+
+    setTimeout(()=>{
+
+        document.getElementById(
+            "end"
+        ).style.display="flex";
+
+        document.getElementById(
+            "endTitle"
+        ).textContent=
+            "UJEL TE JE!";
+
+        document.getElementById(
+            "endText"
+        ).textContent=
+            "Slišal si ga za sabo ... toda bilo je prepozno.";
+
+    },650);
+
+}
+
+/* =========================================================
+   WIN
+   ========================================================= */
+
+function winGame(){
+
+    if(gameOver)return;
+
+    gameOver=true;
+
+    oscillator(
+        500,
+        .15,
+        "sine",
+        .15
+    );
+
+    setTimeout(()=>{
+        oscillator(
+            800,
+            .35,
+            "sine",
+            .15
+        );
+    },150);
+
+    if(document.pointerLockElement)
+        document.exitPointerLock();
+
+    document.getElementById(
+        "end"
+    ).style.display="flex";
+
+    document.getElementById(
+        "endTitle"
+    ).textContent=
+        "POBEGNIL SI!";
+
+    document.getElementById(
+        "endText"
+    ).textContent=
+        "Izšel si iz Ice Cream House ... ampak nekaj je morda odšlo za tabo.";
+
+}
+
+/* =========================================================
+   UPDATE HUD
+   ========================================================= */
+
+function updateHUD(){
+
+    const fill=
+        document.getElementById(
+            "batteryFill"
+        );
+
+    fill.style.width=
+        battery+"%";
+
+    if(battery<25){
+
+        fill.style.background="#b30000";
+
+    }else{
+
+        fill.style.background="#ddd";
+
+    }
+
+    document.getElementById(
+        "objective"
+    ).textContent=
+        keyItem.taken
+        ? "Ključ imaš. Poišči izhod."
+        : "Poišči ključ.";
+
+}
+
+/* =========================================================
+   LOOP
+   ========================================================= */
+
+function loop(now){
+
+    const dt=
+        Math.min(
+            .05,
+            (now-last)/1000
+        );
+
+    last=now;
+
+    if(started && !gameOver){
+
+        updatePlayer(dt);
+
+        updateMonster(dt);
+
+        updateHUD();
+
+        if(messageTimer>0){
+
+            messageTimer-=dt;
+
+            if(messageTimer<=0){
+
+                document.getElementById(
+                    "message"
+                ).textContent="";
+
+            }
+
+        }
+
+        render();
+
+    }else{
+
+        render();
+
+    }
+
+    requestAnimationFrame(loop);
+
+}
+
+requestAnimationFrame(loop);
+
+/* =========================================================
+   START
+   ========================================================= */
+
+document.getElementById(
+    "startBtn"
+).onclick=()=>{
+
+    document.getElementById(
+        "start"
+    ).style.display="none";
+
+    started=true;
+
+    initAudio();
+
+    canvas.requestPointerLock();
+
+    message(
+        "Nekaj diha v temi..."
+    );
+
+};
+
+</script>
+
+</body>
+</html>

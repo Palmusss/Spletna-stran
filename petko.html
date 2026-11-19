@@ -1,0 +1,510 @@
+
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OŠ Radlje ob Dravi – Petko</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f8fc;
+    color: #243044;
+    line-height: 1.7;
+}
+
+header {
+    background: #174b86;
+    color: white;
+    padding: 18px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 8px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #ffdf55;
+}
+
+.hero {
+    min-height: 480px;
+    background: linear-gradient(135deg, #174b86, #3289c9);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 60px 8%;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.hero-text {
+    max-width: 550px;
+}
+
+.hero h1 {
+    font-size: clamp(34px, 5vw, 55px);
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.hero button {
+    background: #ffdc48;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.petko {
+    font-size: 150px;
+    background: #ffdc48;
+    border-radius: 50%;
+    width: 240px;
+    height: 240px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 12px 30px #12385b66;
+}
+
+section {
+    padding: 65px 9%;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 32px;
+    color: #174b86;
+    margin-bottom: 35px;
+}
+
+.about {
+    max-width: 900px;
+    margin: auto;
+    text-align: center;
+    font-size: 18px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+    margin-top: 35px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px #0000000c;
+    text-align: center;
+}
+
+.card .icon {
+    font-size: 40px;
+}
+
+.card h3 {
+    color: #174b86;
+    margin: 12px 0;
+}
+
+.petko-section {
+    background: #fff1ad;
+    text-align: center;
+}
+
+.petko-section .description {
+    max-width: 850px;
+    margin: auto;
+    font-size: 18px;
+}
+
+.history {
+    background: white;
+}
+
+.history-content {
+    max-width: 850px;
+    margin: auto;
+}
+
+.history-content h3 {
+    color: #174b86;
+    margin: 20px 0 8px;
+}
+
+.results {
+    max-width: 650px;
+    margin: 35px auto;
+}
+
+.result {
+    margin: 20px 0;
+}
+
+.bar {
+    height: 17px;
+    background: #e3eaf2;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.fill {
+    height: 100%;
+    background: #3289c9;
+    border-radius: 20px;
+}
+
+.highlight {
+    background: #fff4bd;
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 25px;
+    text-align: center;
+}
+
+footer {
+    background: #174b86;
+    color: white;
+    text-align: center;
+    padding: 35px 15px;
+}
+
+footer a {
+    color: #ffdf55;
+}
+
+@media(max-width: 600px) {
+    header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero {
+        text-align: center;
+    }
+
+    .petko {
+        width: 190px;
+        height: 190px;
+        font-size: 115px;
+    }
+
+    section {
+        padding: 45px 6%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🏫 OŠ Radlje ob Dravi</div>
+
+    <nav>
+        <a href="#domov">Domov</a>
+        <a href="#sola">O šoli</a>
+        <a href="#petko">Petko</a>
+        <a href="#zgodovina">Zgodovina</a>
+        <a href="#kontakt">Kontakt</a>
+    </nav>
+</header>
+
+<div class="hero" id="domov">
+    <div class="hero-text">
+        <h1>Dobrodošli na naši šoli!</h1>
+
+        <p>
+            Dobro počutje, dobri odnosi in
+            kvalitetno znanje.
+            Spoznajte Osnovno šolo Radlje ob Dravi
+            in našo priljubljeno maskoto Petka!
+        </p>
+
+        <button onclick="document.getElementById('petko').scrollIntoView()">
+            Spoznaj Petka!
+        </button>
+    </div>
+
+    <div class="petko" title="Petko">✋</div>
+</div>
+
+<section id="sola">
+    <h2 class="section-title">O naši šoli</h2>
+
+    <div class="about">
+        <p>
+            Osnovna šola Radlje ob Dravi je pomemben
+            del lokalne skupnosti. Učencem omogoča
+            pridobivanje znanja, razvijanje sposobnosti,
+            ustvarjalnosti in prijateljskih odnosov.
+        </p>
+
+        <p>
+            Šolo sestavljajo matična šola,
+            podružnični šoli Vuhred in Remšnik
+            ter vrtec.
+        </p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <div class="icon">📚</div>
+            <h3>Znanje</h3>
+            <p>Vsak dan odkrivamo nove stvari in se učimo.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🤝</div>
+            <h3>Prijateljstvo</h3>
+            <p>Gradimo dobre odnose in si med seboj pomagamo.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🏆</div>
+            <h3>Uspehi</h3>
+            <p>Ponosni smo na svoje dosežke in sodelovanje.</p>
+        </div>
+    </div>
+</section>
+
+<section class="petko-section" id="petko">
+    <h2 class="section-title">Spoznaj našega Petka!</h2>
+
+    <div class="petko" style="margin: 0 auto 25px;">
+        ✋
+    </div>
+
+    <div class="description">
+        <h3>Naš šolski junak!</h3>
+
+        <p>
+            Petko je maskota Osnovne šole Radlje ob Dravi
+            in vrtca. Predstavlja učence, njihovo
+            ustvarjalnost, dejavnosti in življenje
+            v šoli ter zunaj nje.
+        </p>
+
+        <p>
+            Je zaščitni znak naše šole in nas spremlja
+            na tekmovanjih, prireditvah ter v medijih.
+            S svojo prisotnostjo prinaša veselje
+            in krepi pripadnost šolski skupnosti.
+        </p>
+    </div>
+</section>
+
+<section class="history" id="zgodovina">
+    <h2 class="section-title">Kako je nastal Petko?</h2>
+
+    <div class="history-content">
+
+        <h3>📅 Leto 2011</h3>
+        <p>
+            Maskota je nastala poleti leta 2011,
+            skupaj z novim logotipom šole.
+            Navdih zanjo je bila roka iz starega
+            šolskega logotipa.
+        </p>
+
+        <h3>🗳️ Izbiranje imena</h3>
+        <p>
+            Učenci so predlagali kar 60 imen.
+            Med najboljšimi tremi so bili Petko,
+            Učko in Rupet.
+        </p>
+
+        <h3>🏆 Zmagovalec je Petko!</h3>
+        <p>
+            Oktobra 2011 je potekalo glasovanje,
+            na katerem je sodelovalo 488 učencev.
+            Največ glasov je prejel Petko.
+        </p>
+
+        <div class="results">
+
+            <div class="result">
+                <strong>Petko – 222 glasov</strong>
+                <div class="bar">
+                    <div class="fill" style="width:100%"></div>
+                </div>
+            </div>
+
+            <div class="result">
+                <strong>Učko – 139 glasov</strong>
+                <div class="bar">
+                    <div class="fill" style="width:62.6%"></div>
+                </div>
+            </div>
+
+            <div class="result">
+                <strong>Rupet – 104 glasovi</strong>
+                <div class="bar">
+                    <div class="fill" style="width:46.8%"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="highlight">
+            <h3>💛 Ali veš?</h3>
+            <p>
+                Avtor imena Petko je bil učenec
+                Leon Knuplež. Petko je zmagal
+                z 222 glasovi!
+            </p>
+        </div>
+
+        <h3>🎉 Petko danes</h3>
+        <p>
+            Petko še vedno obiskuje učence in
+            sodeluje pri različnih šolskih
+            dejavnostih. 20. oktobra 2026 je
+            obiskal prvošolce in drugošolce
+            v Vuhredu, z njimi telovadil in zapel
+            pesem Ko si srečen.
+        </p>
+
+    </div>
+</section>
+
+<section>
+    <h2 class="section-title">Zakaj imamo radi Petka?</h2>
+
+    <div class="cards">
+        <div class="card">
+            <div class="icon">💛</div>
+            <h3>Veselje</h3>
+            <p>Na obraze učencev prinaša nasmehe.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🏫</div>
+            <h3>Pripadnost</h3>
+            <p>Predstavlja našo šolo in vse njene učence.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🎈</div>
+            <h3>Druženje</h3>
+            <p>Popestri šolske dogodke in prireditve.</p>
+        </div>
+    </div>
+</section>
+
+<footer id="kontakt">
+    <h2>Osnovna šola Radlje ob Dravi</h2>
+
+    <p>Koroška cesta 17, 2360 Radlje ob Dravi</p>
+    <p>Telefon: 02 887 95 72</p>
+    <p>E-pošta: info@osradlje.si</p>
+
+    <p>
+        Spletna stran:
+        <a href="https://www.osradlje.si/" target="_blank">
+            www.osradlje.si
+        </a>
+    </p>
+
+    <br>
+    <p>© 2026 – Predstavitvena spletna stran OŠ Radlje ob Dravi</p>
+    <p>💛 Naš Petko, naš ponos!</p>
+</footer>
+
+</body>
+</html>
+
+<section id="galerija">
+    <h2 class="section-title">📸 Petkova galerija</h2>
+
+    <p class="about">
+        Oglej si našega rumenega prijatelja Petka
+        in njegove dogodivščine!
+    </p>
+
+    <div class="cards">
+        <div class="card">
+            <img src="petko1.jpg" alt="Petko"
+                 style="width:100%; border-radius:15px;">
+            <h3></h3>
+        </div>
+
+        <div class="card">
+            <img src="petko2.jpg" alt="Petko na dogodku"
+                 style="width:100%; border-radius:15px;">
+            <h3></h3>
+        </div>
+
+        <div class="card">
+            <img src="petko3.jpg" alt="Petko z učenci"
+                 style="width:100%; border-radius:15px;">
+            <h3></h3>
+        </div>
+    </div>
+</section>
+<nav>
+    <a href="#domov">Domov</a>
+    <a href="#sola">O šoli</a>
+    <a href="#petko">Petko</a>
+    <a href="#zgodovina">Zgodovina</a>
+    <a href="#kontakt">Kontakt</a>
+    <a href="https://www.osradlje.si/" target="_blank">
+        Uradna stran šole ↗
+    </a>
+</nav>
+
+
+<div style="text-align:center; padding:25px;">
+    <a href="moja spletna ah stran.html" style="
+        display:inline-block;
+        background:#ffdc48;
+        color:#174b86;
+        padding:15px 30px;
+        border-radius:30px;
+        text-decoration:none;
+        font-weight:bold;
+        font-size:18px;
+        box-shadow:0 5px 15px #0002;
+        transition:0.3s;">
+        🏠 Nazaj na spletno stran Luke
+    </a>
+</div>

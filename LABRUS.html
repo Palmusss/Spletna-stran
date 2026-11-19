@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luka Stepišnik — Osebna Stran</title>
+<style>
+  :root{
+    --court: #12100e;
+    --court-2: #1c1713;
+    --court-card: #261e18;
+    --wood: #c98a4b;
+    --wood-light: #e0a868;
+    --line: #f2e9db;
+    --orange: #e35b1f;
+    --orange-hover: #ff6a28;
+    --paper: #f2e9db;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--court);
+    color:var(--line);
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,.jersey{
+    font-family:'Arial Black', 'Helvetica Neue', sans-serif;
+    font-weight:900;
+    letter-spacing:-0.02em;
+  }
+
+  a{color:inherit;text-decoration:none;}
+
+  /* SODOBEN NAVIGACIJSKI MENI */
+  header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:rgba(18, 16, 14, 0.9);
+    backdrop-filter: blur(10px);
+    z-index:1000;
+    border-bottom:1px solid rgba(242, 233, 219, 0.1);
+  }
+
+  .nav-container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:1.2rem 2rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .logo{
+    font-weight:900;
+    font-size:1.2rem;
+    color:var(--orange);
+    letter-spacing:1px;
+  }
+
+  .nav-links{
+    display:flex;
+    gap:2rem;
+    list-style:none;
+  }
+
+  .nav-links a{
+    font-size:0.95rem;
+    font-weight:600;
+    color:var(--line);
+    transition:color 0.2s;
+  }
+
+  .nav-links a:hover{
+    color:var(--orange);
+  }
+
+  /* HERO SEKCIJA */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:10vw 8vw 8vw;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 85% 20%, rgba(227,91,31,0.22), transparent 55%),
+      linear-gradient(180deg, var(--court) 0%, var(--court-2) 100%);
+  }
+
+  .hero-court-lines{
+    position:absolute;
+    inset:0;
+    opacity:0.1;
+    pointer-events:none;
+  }
+
+  .eyebrow-name{
+    font-size:clamp(1rem, 2vw, 1.3rem);
+    color:var(--wood-light);
+    margin-bottom:0.5rem;
+    text-transform:uppercase;
+    letter-spacing:2px;
+  }
+
+  .hero h1{
+    font-size:clamp(3.2rem, 10vw, 7.5rem);
+    line-height:0.92;
+    color:var(--paper);
+  }
+
+  .hero h1 span{
+    display:block;
+    color:var(--orange);
+  }
+
+  .hero-sub{
+    margin-top:1.8rem;
+    max-width:40ch;
+    font-size:1.2rem;
+    color:#cfc3ae;
+  }
+
+  .hero-number{
+    position:absolute;
+    right:6vw;
+    bottom:4vw;
+    font-size:clamp(6rem, 22vw, 18rem);
+    color:rgba(227,91,31,0.06);
+    font-family:'Arial Black', sans-serif;
+    font-weight:900;
+    line-height:1;
+    pointer-events:none;
+  }
+
+  /* SPLOŠNE SEKCIJE */
+  section{
+    padding:6rem 8vw;
+    max-width:1400px;
+    margin:0 auto;
+  }
+
+  .section-title{
+    font-size:clamp(2rem, 4vw, 2.8rem);
+    margin-bottom:2.5rem;
+    color:var(--paper);
+  }
+
+  /* HOBIJI / ZAKAJ KOŠARKA */
+  .why{
+    background:var(--court-2);
+    border-top:1px solid rgba(242,233,219,0.05);
+    border-bottom:1px solid rgba(242,233,219,0.05);
+  }
+
+  .why-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+    gap:2.5rem;
+  }
+
+  .why-item{
+    background:var(--court-card);
+    border:1px solid rgba(242,233,219,0.08);
+    border-radius:12px;
+    padding:2.5rem 2rem;
+    transition:transform 0.3s, border-color 0.3s;
+  }
+
+  .why-item:hover{
+    transform:translateY(-5px);
+    border-color:var(--orange);
+  }
+
+  .why-item h3{
+    font-size:1.4rem;
+    margin-bottom:1rem;
+    color:var(--paper);
+  }
+
+  .why-item p{
+    color:#b6a98f;
+    font-size:1rem;
+    line-height:1.6;
+  }
+
+  /* ŠOLA IN STATISTIKA */
+  .inspiration{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:4rem;
+    align-items:center;
+  }
+
+  @media (max-width:820px){
+    .inspiration{grid-template-columns:1fr;}
+    .nav-links{display:none;}
+  }
+
+  .inspiration-text p{
+    color:#cfc3ae;
+    margin-bottom:1.2rem;
+    font-size:1.1rem;
+  }
+
+  .stat-row{
+    display:flex;
+    gap:2.5rem;
+    margin-top:2.5rem;
+    flex-wrap:wrap;
+  }
+
+  .stat{
+    border-left:3px solid var(--orange);
+    padding-left:1rem;
+  }
+
+  .stat b{
+    display:block;
+    font-size:2rem;
+    color:var(--orange);
+    font-family:'Arial Black', sans-serif;
+  }
+
+  .stat span{
+    font-size:0.9rem;
+    color:#a89a82;
+  }
+
+  .school-card{
+    background:var(--court-card);
+    padding:3rem;
+    border-radius:16px;
+    border:1px solid rgba(227,91,31,0.2);
+  }
+
+  /* ŠOLSKI TEDEN / GALERIJA */
+  .gallery{
+    background:var(--court-2);
+  }
+
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1.8rem;
+  }
+
+  @media (max-width:768px){
+    .gallery-grid{grid-template-columns:1fr;}
+  }
+
+  .gallery-card{
+    background:var(--court-card);
+    border-radius:12px;
+    padding:2.5rem 2rem;
+    border:1px solid rgba(242,233,219,0.06);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-height:240px;
+  }
+
+  .gallery-card .num{
+    color:var(--orange);
+    font-size:0.9rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+
+  .gallery-card h3{
+    font-size:1.35rem;
+    margin-top:1rem;
+    color:var(--paper);
+  }
+
+  .gallery-card p{
+    color:#b6a98f;
+    font-size:0.98rem;
+    margin-top:0.8rem;
+  }
+
+  /* IGRA SEKCIJA */
+  .game-section{
+    padding:6rem 2rem;
+    text-align:center;
+    background:var(--court);
+  }
+
+  .game-container{
+    max-width:960px;
+    margin:2rem auto 0;
+    height:560px;
+    background:#020202;
+    border:2px solid #33231a;
+    border-radius:12px;
+    position:relative;
+    overflow:hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  }
+
+  .game-container canvas{
+    display:block;
+    width:100%;
+    height:100%;
+    cursor:none;
+  }
+
+  /* Igra UI elementi znotraj okvira */
+  #ui{position:absolute;inset:0;pointer-events:none;}
+  #crosshair{position:absolute;left:50%;top:50%;width:5px;height:5px;margin:-2px;border:1px solid rgba(255,255,255,.75);border-radius:50%;box-shadow:0 0 5px white;}
+  #hud{position:absolute;left:22px;top:20px;font-size:14px;text-shadow:0 2px 6px #000;letter-spacing:1px;text-align:left;}
+  #battery{width:150px;height:9px;border:1px solid rgba(255,255,255,.8);margin-top:7px;background:#111;}
+  #batteryFill{width:100%;height:100%;background:#ddd;transition:.15s;}
+  #objective{margin-top:10px;color:#ddd;font-weight:bold;}
+  #message{position:absolute;bottom:14%;width:100%;text-align:center;font-size:20px;letter-spacing:2px;text-shadow:0 2px 8px #000;color:#fff;}
+  #danger{position:absolute;inset:0;border:0 solid rgba(180,0,0,0);}
+  
+  #start, #end{
+    position:absolute;
+    inset:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    padding:2rem;
+  }
+  #start{background:radial-gradient(circle at center,#292929 0,#090909 38%,#000 100%);}
+  #start h1{font-size:42px;margin:0 0 5px;letter-spacing:6px;color:#eee;text-shadow:0 0 10px #fff,0 0 35px #700;}
+  #start .sub{color:#a00;letter-spacing:4px;margin-bottom:15px;font-weight:bold;}
+  #start p{max-width:600px;color:#aaa;line-height:1.6;font-size:0.95rem;}
+  
+  .game-btn{
+    padding:14px 38px;
+    border:1px solid #777;
+    background:#ddd;
+    color:#050505;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:15px;
+    transition:0.2s;
+  }
+  .game-btn:hover{background:#fff;box-shadow:0 0 20px #fff;}
+
+  #end{display:none;background:rgba(0,0,0,.96);}
+  #end h1{font-size:48px;color:#eee;text-shadow:0 0 25px #a00;}
+  #end p{color:#aaa;margin-top:10px;}
+
+  #static{position:absolute;inset:0;z-index:15;pointer-events:none;opacity:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0px,rgba(255,255,255,.025) 1px,transparent 1px,transparent 3px);mix-blend-mode:screen;}
+  #blood{position:absolute;inset:0;z-index:14;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,transparent 35%,rgba(80,0,0,.2) 60%,rgba(150,0,0,.6) 100%);}
+
+  /* FOOTER */
+  footer{
+    padding:3rem 8vw;
+    text-align:center;
+    color:#7a6c57;
+    font-size:0.9rem;
+    border-top:1px solid rgba(242,233,219,0.05);
+    background:var(--court-2);
+  }
+</style>
+</head>
+<body>
+
+<!-- MENI -->
+<header>
+  <div class="nav-container">
+    <div class="logo">LUKA STEPIŠNIK</div>
+    <ul class="nav-links">
+      <li><a href="#domov">Domov</a></li>
+      <li><a href="#hobiji">Hobiji</a></li>
+      <li><a href="#sola">Moja šola</a></li>
+      <li><a href="#teden">Šolski teden</a></li>
+      <li><a href="#igra">Igrica</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="domov" class="hero">
+  <svg class="hero-court-lines" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+    <circle cx="500" cy="500" r="180" fill="none" stroke="#f2e9db" stroke-width="2"/>
+    <line x1="0" y1="500" x2="1000" y2="500" stroke="#f2e9db" stroke-width="2"/>
+    <rect x="0" y="300" width="220" height="400" fill="none" stroke="#f2e9db" stroke-width="2"/>
+  </svg>
+  <div class="eyebrow-name">Osebna spletna stran</div>
+  <h1>Luka<br><span>Stepišnik</span></h1>
+  <p class="hero-sub">Učenec Osnovne šole Radlje ob Dravi, navdušen nad športom, kolesarjenjem in igricami.</p>
+  <div class="hero-number">99</div>
+</section>
+
+<!-- HOBIJI -->
+<section id="hobiji" class="why">
+  <h2 class="section-title">Moji hobiji.</h2>
+  <div class="why-grid">
+    <div class="why-item">
+      <h3>🚴‍♂️ Downhill vožnja s kolesom</h3>
+      <p>Adrenalin, hitrost, skoki in raziskovanje gozdnih poti s polno vzmetenim kolesom.</p>
+    </div>
+    <div class="why-item">
+      <h3>🎮 Videoigrice</h3>
+      <p>Prosti čas rad preživljam ob igranju napetih in zabavnih igric ter premagovanju izzivov.</p>
+    </div>
+    <div class="why-item">
+      <h3>🏀 Košarka</h3>
+      <p>Metanje na koš, borba pod obročem in ekipna igra s prijatelji.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ŠOLA -->
+<section id="sola" class="inspiration">
+  <div class="inspiration-text">
+    <h2 class="section-title">Moja šola</h2>
+    <p>Obiskujem OŠ Radlje ob Dravi. Poupravičeno lahko rečem, da je šola čisto v redu in nimam preveč pripomb glede obveznosti!</p>
+    <p>Vsak dan se najdejo novi dogodki in zabavni trenutki s sоšolci.</p>
+    <div class="stat-row">
+      <div class="stat">
+        <b>OŠ</b>
+        <span>Radlje ob Dravi</span>
+      </div>
+      <div class="stat">
+        <b>Top</b>
+        <span>Ponedeljki brez matematike</span>
+      </div>
+    </div>
+  </div>
+  <div class="school-card">
+    <h3 style="color:var(--orange); font-size:1.5rem; margin-bottom:1rem;">Učiteljski utrip</h3>
+    <p style="color:#b6a98f;">Šolski dnevi so dinamični. Včasih nam gredo predmeti hitro od rok, včasih pa se ura vleče – še posebej ob sredah, ko je na vrsti matematika!</p>
+  </div>
+</section>
+
+<!-- GALERIJA / ŠOLSKI TEDEN -->
+<section id="teden" class="gallery">
+  <h2 class="section-title">Moj šolski teden</h2>
+  <div class="gallery-grid">
+    <div class="gallery-card">
+      <div class="num">Ponedeljek</div>
+      <h3>Všeč mi je, ker ni matematike</h3>
+      <p>Najboljši začetek tedna. Let's goooooooooo!</p>
+    </div>
+    <div class="gallery-card">
+      <div class="num">Sreda</div>
+      <h3>Ni mi všeč, ker imamo matematiko</h3>
+      <p>Pa dej, zakaj ravno danes? Nekako bomo že preživeli.</p>
+    </div>
+    <div class="gallery-card">
+      <div class="num">Nedelja</div>
+      <h3>Dan za sprostitev</h3>
+      <p>Priprave na nov teden, urejanje opreme in igranje igric. Šola je v bistvu kar v redu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- IGRICA -->
+<section id="igra" class="game-section">
+  <h2 class="section-title">Scary Ice Cream House</h2>
+  <p style="color:#a89a82; margin-bottom:1.5rem;">Preizkusi svojo pogum in pobegni iz zapuščene hiše groze!</p>
+  
+  <div class="game-container">
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="ui">
+      <div id="hud">
+        🔦 SVETILKA
+        <div id="battery"><div id="batteryFill"></div></div>
+        <div id="objective">Poišči ključ.</div>
+      </div>
+      <div id="crosshair"></div>
+      <div id="message"></div>
+      <div id="danger"></div>
+    </div>
+
+    <div id="static"></div>
+    <div id="blood"></div>
+
+    <div id="start">
+      <h1>ICE CREAM HOUSE</h1>
+      <div class="sub">NIGHTMARE EDITION</div>
+      <p>
+        Zbudil si se v zapuščeni hiši, kjer so nekoč izdelovali sladoled. Toda nekdo je še vedno tukaj.<br><br>
+        <b>W A S D</b> – premikanje | <b>SHIFT</b> – tek | <b>MIŠKA</b> – pogled | <b>F</b> – svetilka | <b>E</b> – uporaba<br><br>
+        Ne zaupaj zvokom. In če zaslišiš dihanje ... <b>NE OBRNI SE.</b>
+      </p>
+      <button class="game-btn" id="startBtn">VSTOPI V HIŠO</button>
+    </div>
+
+    <div id="end">
+      <h1 id="endTitle">...</h1>
+      <p id="endText"></p>
+      <button class="game-btn" onclick="location.reload()">IGRAJ ZNOVA</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Stran Luke Stepišnika — Osnovna šola Radlje ob Dravi. Vse pravice pridržane.
+</footer>
+
+<script>
+"use strict";
+
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let W = canvas.parentElement.clientWidth;
+let H = canvas.parentElement.clientHeight;
+
+canvas.width = W;
+canvas.height = H;
+
+window.addEventListener("resize", () => {
+    if(!canvas.parentElement) return;
+    W = canvas.parentElement.clientWidth;
+    H = canvas.parentElement.clientHeight;
+    canvas.width = W;
+    canvas.height = H;
+});
+
+let started = false;
+let gameOver = false;
+const keys = {};
+let flashlight = true;
+let battery = 100;
+let mouseLocked = false;
+let messageTimer = 0;
+let last = performance.now();
+
+window.addEventListener("keydown", e => {
+    keys[e.key.toLowerCase()] = true;
+    if(e.key.toLowerCase() === "f" && started && !gameOver){
+        flashlight = !flashlight;
+        sfxClick();
+    }
+    if(e.key.toLowerCase() === "e" && started && !gameOver){
+        interact();
+    }
+});
+
+window.addEventListener("keyup", e => {
+    keys[e.key.toLowerCase()] = false;
+});
+
+canvas.addEventListener("click", () => {
+    if(started && !gameOver){
+        canvas.requestPointerLock();
+    }
+});
+
+document.addEventListener("pointerlockchange", () => {
+    mouseLocked = document.pointerLockElement === canvas;
+});
+
+document.addEventListener("mousemove", e => {
+    if(!mouseLocked || gameOver) return;
+    player.angle += e.movementX * .0025;
+});
+
+let audio = null;
+let master = null;
+
+function initAudio(){
+    if(audio) return;
+    audio = new (window.AudioContext || window.webkitAudioContext)();
+    master = audio.createGain();
+    master.gain.value = .22;
+    master.connect(audio.destination);
+    ambientDrone();
+}
+
+function oscillator(freq, duration, type="sine", volume=.1){
+    if(!audio) return;
+    const osc = audio.createOscillator();
+    const gain = audio.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.value = volume;
+    osc.connect(gain);
+    gain.connect(master);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(.001, audio.currentTime + duration);
+    osc.stop(audio.currentTime + duration);
+}
+
+function noise(duration=.15, volume=.08){
+    if(!audio) return;
+    const buffer = audio.createBuffer(1, audio.sampleRate * duration, audio.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0; i<data.length; i++) data[i] = (Math.random() * 2 - 1);
+    const source = audio.createBufferSource();
+    const gain = audio.createGain();
+    source.buffer = buffer;
+    gain.gain.value = volume;
+    source.connect(gain);
+    gain.connect(master);
+    source.start();
+}
+
+function sfxClick(){ oscillator(450, .04, "square", .06); oscillator(120, .08, "sine", .04); }
+function sfxDoor(){ oscillator(80, .4, "sawtooth", .12); noise(.25, .06); }
+function sfxKey(){ oscillator(700, .08, "sine", .13); setTimeout(() => { oscillator(1050, .18, "sine", .13); }, 80); }
+function sfxFootstep(){ noise(.045, .025); oscillator(55, .04, "sine", .025); }
+function sfxScare(){ oscillator(40, .8, "sawtooth", .3); setTimeout(() => { oscillator(75, .6, "square", .2); }, 100); noise(.5, .18); }
+function ambientDrone(){
+    if(!audio) return;
+    const osc = audio.createOscillator();
+    const gain = audio.createGain();
+    osc.type = "sine";
+    osc.frequency.value = 32;
+    gain.gain.value = .025;
+    osc.connect(gain);
+    gain.connect(master);
+    osc.start();
+}
+
+const map = [
+"##############################",
+"#............#...............#",
+"#............#...............#",
+"#............#...............#",
+"#....######..#......#####....#",
+"#............#...............#",
+"#............................#",
+"#.....###########............#",
+"#............................#",
+"#..........#.................#",
+"#..........#....######.......#",
+"#..........#.................#",
+"#............................#",
+"#....####....................#",
+"#............................#",
+"#..........##########........#",
+"#............................#",
+"#..............K.............#",
+"#............................#",
+"#....######.................#",
+"#............................#",
+"#.............D..............#",
+"#............................#",
+"#...........#####............#",
+"#............................#",
+"##############################"
+];
+
+const walls = [];
+for(let y=0; y<map.length; y++){
+    for(let x=0; x<map[y].length; x++){
+        if(map[y][x] === "#"){
+            walls.push({x: x + .5, y: y + .5});
+        }
+    }
+}
+
+const player = { x: 3.5, y: 3.5, angle: 0, speed: 2.5, sprint: 4.2 };
+const keyItem = { x: 15.5, y: 17.5, taken: false };
+const exit = { x: 14.5, y: 21.5, open: false };
+
+const monster = {
+    x: 24.5, y: 23.5, angle: Math.PI, speed: 1.0, state: "patrol", targetX: 24.5, targetY: 23.5, awareness: 0
+};
+
+const patrolPoints = [
+    {x:24.5,y:23.5}, {x:27.5,y:23.5}, {x:27.5,y:17.5}, {x:22.5,y:17.5},
+    {x:22.5,y:12.5}, {x:26.5,y:12.5}, {x:26.5,y:6.5}, {x:17.5,y:6.5}, {x:17.5,y:3.5}
+];
+let patrolIndex = 0;
+
+function isWall(x, y){
+    if(x < 0 || y < 0 || y >= map.length || x >= map[0].length) return true;
+    const c = map[Math.floor(y)][Math.floor(x)];
+    if(c === "#") return true;
+    if(c === "D" && !exit.open) return true;
+    return false;
+}
+
+function canMove(x, y){
+    const r = .22;
+    return !isWall(x-r, y-r) && !isWall(x+r, y-r) && !isWall(x-r, y+r) && !isWall(x+r, y+r);
+}
+
+function moveObject(obj, dx, dy){
+    if(canMove(obj.x + dx, obj.y)) obj.x += dx;
+    if(canMove(obj.x, obj.y + dy)) obj.y += dy;
+}
+
+function dist(ax, ay, bx, by){ return Math.hypot(ax - bx, ay - by); }
+
+function lineOfSight(ax, ay, bx, by){
+    const d = dist(ax, ay, bx, by);
+    const steps = Math.ceil(d * 15);
+    for(let i=1; i<steps; i++){
+        const t = i / steps;
+        const x = ax + (bx - ax) * t;
+        const y = ay + (by - ay) * t;
+        if(isWall(x, y)) return false;
+    }
+    return true;
+}
+
+let footTimer = 0;
+function updatePlayer(dt){
+    let f = 0, s = 0;
+    if(keys["w"]) f++;
+    if(keys["s"]) f--;
+    if(keys["a"]) s--;
+    if(keys["d"]) s++;
+
+    const moving = f !== 0 || s !== 0;
+    if(moving){
+        const len = Math.hypot(f, s);
+        f /= len; s /= len;
+        const speed = keys["shift"] ? player.sprint : player.speed;
+        const dx = Math.cos(player.angle) * f - Math.sin(player.angle) * s;
+        const dy = Math.sin(player.angle) * f + Math.cos(player.angle) * s;
+        moveObject(player, dx * speed * dt, dy * speed * dt);
+
+        footTimer -= dt;
+        if(footTimer <= 0){
+            sfxFootstep();
+            footTimer = keys["shift"] ? .28 : .43;
+        }
+    }
+
+    if(flashlight){
+        battery -= dt * 1.15;
+        if(battery <= 0){
+            battery = 0;
+            flashlight = false;
+            message("Svetilka je ugasnila.");
+            noise(.2, .08);
+        }
+    }
+}
+
+function updateMonster(dt){
+    const d = dist(monster.x, monster.y, player.x, player.y);
+    const visible = d < 12 && lineOfSight(monster.x, monster.y, player.x, player.y);
+
+    if(visible){
+        monster.awareness += dt * (flashlight ? 1.7 : .7);
+    } else {
+        monster.awareness -= dt * .8;
+    }
+    monster.awareness = Math.max(0, Math.min(3, monster.awareness));
+
+    if(monster.awareness > 1){
+        monster.state = "chase";
+        monster.targetX = player.x;
+        monster.targetY = player.y;
+    }
+
+    if(monster.state === "chase"){
+        const dx = player.x - monster.x;
+        const dy = player.y - monster.y;
+        const len = Math.hypot(dx, dy);
+        if(len > 0){
+            monster.angle = Math.atan2(dy, dx);
+            const chaseSpeed = monster.speed + (d < 6 ? 0.65 : 0) + (d < 3 ? 0.45 : 0);
+            moveObject(monster, dx / len * chaseSpeed * dt, dy / len * chaseSpeed * dt);
+        }
+        if(d < .72) monsterAttack();
+        if(!visible && d > 13){
+            monster.state = "patrol";
+            monster.awareness = 0;
+        }
+    } else {
+        const p = patrolPoints[patrolIndex];
+        const dx = p.x - monster.x;
+        const dy = p.y - monster.y;
+        const len = Math.hypot(dx, dy);
+        if(len < .35){
+            patrolIndex = (patrolIndex + 1) % patrolPoints.length;
+        } else {
+            monster.angle = Math.atan2(dy, dx);
+            moveObject(monster, dx / len * monster.speed * dt, dy / len * monster.speed * dt);
+        }
+    }
+
+    if(d < 6 && Math.random() < dt * .8){
+        oscillator(70, .18, "sine", .04);
+    }
+}
+
+const FOV = Math.PI / 3;
+
+function castRay(angle){
+    const sin = Math.sin(angle);
+    const cos = Math.cos(angle);
+    let x = player.x, y = player.y;
+    const step = .025;
+    for(let depth=0; depth<30; depth+=step){
+        x += cos * step;
+        y += sin * step;
+        if(isWall(x, y)) return { distance: depth, x, y };
+    }
+    return { distance: 30, x, y };
+}
+
+function render(){
+    const ceiling = ctx.createLinearGradient(0, 0, 0, H/2);
+    ceiling.addColorStop(0, "#010101");
+    ceiling.addColorStop(1, "#141417");
+    ctx.fillStyle = ceiling;
+    ctx.fillRect(0, 0, W, H/2);
+
+    const floor = ctx.createLinearGradient(0, H/2, 0, H);
+    floor.addColorStop(0, "#191716");
+    floor.addColorStop(1, "#010101");
+    ctx.fillStyle = floor;
+    ctx.fillRect(0, H/2, W, H/2);
+
+    const rays = Math.min(Math.floor(W/2), 600);
+    const columnW = W / rays;
+
+    for(let i=0; i<rays; i++){
+        const camera = i / rays - .5;
+        const angle = player.angle + camera * FOV;
+        const hit = castRay(angle);
+        let d = hit.distance * Math.cos(angle - player.angle);
+        d = Math.max(d, .01);
+        let height = H / (d * .78);
+
+        const wallShade = Math.max(5, 190 - d * 13);
+        let light = 1;
+        if(flashlight){
+            const a = Math.abs(normalize(angle - player.angle));
+            const beam = Math.max(0, 1 - a / (FOV * .55));
+            light = .12 + beam * .95;
+        } else {
+            light = .045;
+        }
+
+        const noiseShade = Math.random() * 3;
+        const r = Math.min(255, wallShade * light + noiseShade);
+        const g = Math.min(255, wallShade * .9 * light + noiseShade);
+        const b = Math.min(255, wallShade * .82 * light + noiseShade);
+
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+        ctx.fillRect(i * columnW, H/2 - height/2, columnW + 1, height);
+    }
+
+    renderObjects();
+    renderLighting();
+    renderWeapon();
+    renderVignette();
+}
+
+function normalize(a){
+    while(a > Math.PI) a -= Math.PI * 2;
+    while(a < -Math.PI) a += Math.PI * 2;
+    return a;
+}
+
+function renderMonster(){
+    const dx = monster.x - player.x;
+    const dy = monster.y - player.y;
+    const d = Math.hypot(dx, dy);
+    if(d > 18) return;
+    let a = Math.atan2(dy, dx) - player.angle;
+    a = normalize(a);
+    if(Math.abs(a) > FOV * .72) return;
+
+    const sx = W/2 + Math.tan(a) / Math.tan(FOV/2) * W/2;
+    const size = H / (d * .82);
+    const wall = castRay(player.angle + a);
+    if(d > wall.distance + .1) return;
+
+    const top = H/2 - size * .56;
+
+    ctx.fillStyle = "rgba(0,0,0,.8)";
+    ctx.beginPath();
+    ctx.ellipse(sx, H/2 + size * .48, size * .55, size * .12, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#111";
+    ctx.beginPath();
+    ctx.moveTo(sx - size * .30, top + size * .30);
+    ctx.lineTo(sx - size * .43, top + size * .96);
+    ctx.lineTo(sx + size * .43, top + size * .96);
+    ctx.lineTo(sx + size * .30, top + size * .30);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.strokeStyle = "#090909";
+    ctx.lineWidth = Math.max(3, size * .08);
+    ctx.beginPath();
+    ctx.moveTo(sx - size * .24, top + size * .4);
+    ctx.lineTo(sx - size * .62, top + size * .88);
+    ctx.moveTo(sx + size * .24, top + size * .4);
+    ctx.lineTo(sx + size * .62, top + size * .88);
+    ctx.stroke();
+
+    ctx.fillStyle = "#1b1b1b";
+    ctx.fillRect(sx - size * .12, top + size * .18, size * .24, size * .22);
+
+    ctx.fillStyle = "#c1a090";
+    ctx.beginPath();
+    ctx.ellipse(sx, top + size * .15, size * .22, size * .25, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#ff1818";
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = "#f00";
+    ctx.beginPath();
+    ctx.ellipse(sx - size * .09, top + size * .14, size * .045, size * .025, 0, 0, Math.PI * 2);
+    ctx.ellipse(sx + size * .09, top + size * .14, size * .045, size * .025, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+}
+
+function renderKey(){
+    if(keyItem.taken) return;
+    const dx = keyItem.x - player.x;
+    const dy = keyItem.y - player.y;
+    const d = Math.hypot(dx, dy);
+    let a = Math.atan2(dy, dx) - player.angle;
+    a = normalize(a);
+    if(Math.abs(a) > FOV * .72) return;
+
+    const sx = W/2 + Math.tan(a) / Math.tan(FOV/2) * W/2;
+    const size = H / (d * 1.2) * .15;
+    const wall = castRay(player.angle + a);
+    if(d > wall.distance) return;
+
+    ctx.strokeStyle = "#ffd000";
+    ctx.lineWidth = Math.max(2, size * .12);
+    ctx.shadowColor = "#ffd000";
+    ctx.shadowBlur = 20;
+    ctx.beginPath();
+    ctx.arc(sx, H/2 - size * .15, size * .23, 0, Math.PI * 2);
+    ctx.moveTo(sx + size * .23, H/2 - size * .15);
+    ctx.lineTo(sx + size * .8, H/2 - size * .15);
+    ctx.lineTo(sx + size * .62, H/2 + size * .05);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+}
+
+function renderObjects(){
+    renderKey();
+    renderMonster();
+}
+
+function renderLighting(){
+    if(!flashlight){
+        ctx.fillStyle = "rgba(0,0,0,.58)";
+        ctx.fillRect(0, 0, W, H);
+        return;
+    }
+    const light = ctx.createRadialGradient(W/2, H/2, 20, W/2, H/2, Math.min(W, H)*.65);
+    light.addColorStop(0, "rgba(255,255,235,.05)");
+    light.addColorStop(.35, "rgba(255,255,230,.02)");
+    light.addColorStop(1, "rgba(0,0,0,.5)");
+    ctx.fillStyle = light;
+    ctx.fillRect(0, 0, W, H);
+}
+
+function renderWeapon(){
+    ctx.fillStyle = "#bd846d";
+    ctx.beginPath();
+    ctx.ellipse(W * .82, H * .86, 40, 75, -.35, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#1a1a1a";
+    ctx.save();
+    ctx.translate(W * .78, H * .83);
+    ctx.rotate(-.12);
+    ctx.fillRect(-15, -17, 145, 34);
+    ctx.fillStyle = "#555";
+    ctx.fillRect(-15, -17, 18, 34);
+    ctx.fillStyle = flashlight ? "#eee" : "#111";
+    ctx.beginPath();
+    ctx.arc(-17, 0, 13, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+}
+
+function renderVignette(){
+    const d = dist(player.x, player.y, monster.x, monster.y);
+    if(d < 7){
+        const fear = Math.max(0, (7 - d) / 7);
+        ctx.fillStyle = `rgba(130,0,0,${fear * .18})`;
+        ctx.fillRect(0, 0, W, H);
+        const pulse = Math.sin(performance.now() * .015) * .5 + .5;
+        document.getElementById("danger").style.border = `${2 + fear * 15}px solid rgba(180,0,0,${fear * (.2 + pulse * .25)})`;
+    } else {
+        document.getElementById("danger").style.border = "0 solid transparent";
+    }
+
+    const g = ctx.createRadialGradient(W/2, H/2, Math.min(W,H)*.18, W/2, H/2, Math.max(W,H)*.72);
+    g.addColorStop(0, "rgba(0,0,0,0)");
+    g.addColorStop(.65, "rgba(0,0,0,.12)");
+    g.addColorStop(1, "rgba(0,0,0,.9)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+
+    document.getElementById("static").style.opacity = Math.random() * .025;
+}
+
+function interact(){
+    if(!keyItem.taken && dist(player.x, player.y, keyItem.x, keyItem.y) < 1.4){
+        keyItem.taken = true;
+        sfxKey();
+        message("NAŠEL SI STAR KLJUČ...");
+        return;
+    }
+
+    const d = dist(player.x, player.y, exit.x, exit.y);
+    if(d < 1.5){
+        if(!keyItem.taken){
+            sfxDoor();
+            message("VRATA SO ZAKLENJENA.");
+        } else {
+            exit.open = true;
+            sfxDoor();
+            winGame();
+        }
+    }
+}
+
+function message(text){
+    document.getElementById("message").textContent = text;
+    messageTimer = 3;
+}
+
+function monsterAttack(){
+    if(gameOver) return;
+    gameOver = true;
+    sfxScare();
+    document.getElementById("blood").style.opacity = "1";
+    if(document.pointerLockElement) document.exitPointerLock();
+
+    setTimeout(() => {
+        document.getElementById("end").style.display = "flex";
+        document.getElementById("endTitle").textContent = "UJEL TE JE!";
+        document.getElementById("endText").textContent = "Slišal si ga za sabo ... toda bilo je prepozno.";
+    }, 650);
+}
+
+function winGame(){
+    if(gameOver) return;
+    gameOver = true;
+    oscillator(500, .15, "sine", .15);
+    setTimeout(() => { oscillator(800, .35, "sine", .15); }, 150);
+    if(document.pointerLockElement) document.exitPointerLock();
+
+    document.getElementById("end").style.display = "flex";
+    document.getElementById("endTitle").textContent = "POBEGNIL SI!";
+    document.getElementById("endText").textContent = "Izšel si iz Ice Cream House ... ampak nekaj je morda odšlo za tabo.";
+}
+
+function updateHUD(){
+    const fill = document.getElementById("batteryFill");
+    fill.style.width = battery + "%";
+    fill.style.background = battery < 25 ? "#b30000" : "#ddd";
+    document.getElementById("objective").textContent = keyItem.taken ? "Ključ imaš. Poišči izhod." : "Poišči ključ.";
+}
+
+function loop(now){
+    const dt = Math.min(.05, (now - last) / 1000);
+    last = now;
+
+    if(started && !gameOver){
+        updatePlayer(dt);
+        updateMonster(dt);
+        updateHUD();
+
+        if(messageTimer > 0){
+            messageTimer -= dt;
+            if(messageTimer <= 0) document.getElementById("message").textContent = "";
+        }
+    }
+    render();
+    requestAnimationFrame(loop);
+}
+
+requestAnimationFrame(loop);
+
+document.getElementById("startBtn").onclick = () => {
+    document.getElementById("start").style.display = "none";
+    started = true;
+    initAudio();
+    canvas.requestPointerLock();
+};
+</script>
+
+</body>
+</html>
